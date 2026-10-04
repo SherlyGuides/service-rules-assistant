@@ -1,0 +1,9 @@
+{
+  "base_url": "https://sherlyguides.github.io/service-rules-assistant/",
+  "app_url": "https://sherlyguides.github.io/vidhi-sahayak/",
+  "name": "Service Rules Assistant",
+  "ga_id": "",
+  "google_site_verification": "",
+  "grievance_officer": {"name": "", "email": ""},
+  "model": "Claude Opus 5.5"
+}

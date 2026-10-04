@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0c">
+<title>Library of Official Documents | Service Rules Assistant</title>
+<meta name="description" content="1,548 official Central Government rules, orders, notifications, manuals and judgments, each linked to the official copy.">
+<link rel="canonical" href="https://sherlyguides.github.io/service-rules-assistant/library/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Library of Official Documents | Service Rules Assistant">
+<meta property="og:description" content="1,548 official Central Government rules, orders, notifications, manuals and judgments, each linked to the official copy.">
+<meta property="og:url" content="https://sherlyguides.github.io/service-rules-assistant/library/">
+<meta property="og:image" content="https://sherlyguides.github.io/service-rules-assistant/img/og.jpg">
+
+<link rel="icon" href="https://sherlyguides.github.io/service-rules-assistant/icon.svg" type="image/svg+xml">
+<link rel="preload" href="https://sherlyguides.github.io/service-rules-assistant/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="https://sherlyguides.github.io/service-rules-assistant/assets/site.css">
+<script>window.SRA = {ga: ""};</script>
+<script src="https://sherlyguides.github.io/service-rules-assistant/assets/analytics.js" defer></script>
+
+</head>
+<body>
+<a class="skip" href="#main">Skip to Content</a>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="https://sherlyguides.github.io/service-rules-assistant/"><img src="https://sherlyguides.github.io/service-rules-assistant/icon.svg" alt="" width="26" height="26"><span translate="no">Service Rules Assistant</span></a>
+  <nav class="navlinks" aria-label="Sections"><a href="https://sherlyguides.github.io/service-rules-assistant/articles/">Articles</a><a href="https://sherlyguides.github.io/service-rules-assistant/library/" aria-current="page">Library</a><a href="https://sherlyguides.github.io/service-rules-assistant/#how">How It Works</a></nav>
+  <a class="btn btn-primary btn-sm" href="https://sherlyguides.github.io/vidhi-sahayak/" data-track="open_assistant" data-from="library/"><span>Open<span class="long"> the Assistant</span></span></a>
+</div></header>
+<main id="main">
+<div class="wrap">
+  <h1>Library of Official Documents</h1>
+  <p class="lead">1,548 rules, orders, notifications, manuals and judgments the assistant answers from. Every link opens the official copy. Updated 4 Oct 2026.</p>
+  <div class="toolbar">
+    <label class="sr" for="q" hidden>Search documents</label>
+    <input class="search" id="q" type="search" placeholder="Search by title, number or subject…" autocomplete="off" spellcheck="false">
+    <select class="sort" id="sort" aria-label="Sort"><option value="new">Newest first</option><option value="az">A to Z</option></select>
+  </div>
+  <div class="chips" role="group" aria-label="Category"><button class="chip" type="button" data-cat="" aria-pressed="true">All</button><button class="chip" type="button" data-cat="Central rules and orders" aria-pressed="false">Central rules and orders <span class="muted">59</span></button><button class="chip" type="button" data-cat="KVS and NVS" aria-pressed="false">KVS and NVS <span class="muted">88</span></button><button class="chip" type="button" data-cat="Supreme Court judgments" aria-pressed="false">Supreme Court judgments <span class="muted">158</span></button><button class="chip" type="button" data-cat="Delhi High Court judgments" aria-pressed="false">Delhi High Court judgments <span class="muted">672</span></button><button class="chip" type="button" data-cat="Delhi Police" aria-pressed="false">Delhi Police <span class="muted">402</span></button><button class="chip" type="button" data-cat="Criminal law" aria-pressed="false">Criminal law <span class="muted">57</span></button><button class="chip" type="button" data-cat="Delhi land and DDA" aria-pressed="false">Delhi land and DDA <span class="muted">112</span></button></div>
+  <p class="count" id="count" aria-live="polite"></p>
+  <ul class="doclist" id="list"></ul>
+  <button class="btn btn-secondary more" id="more" type="button" hidden>Show More</button>
+  <noscript><p>Turn on JavaScript to search the library.</p></noscript>
+</div>
+<script>
+(function () {
+  var all = [], view = [], shown = 0, cat = '', STEP = 100, APP = "https://sherlyguides.github.io/vidhi-sahayak/";
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  function apply() {
+    var q = $('q').value.trim().toLowerCase(), words = q.split(/\s+/).filter(Boolean);
+    view = all.filter(function (d) {
+      if (cat && d.c !== cat) return false;
+      var t = d.t.toLowerCase();
+      return words.every(function (w) { return t.indexOf(w) >= 0; });
+    });
+    if ($('sort').value === 'az') view.sort(function (a, b) { return a.t.localeCompare(b.t); });
+    else view.sort(function (a, b) { return (b.d || '0').localeCompare(a.d || '0'); });
+    shown = 0; $('list').innerHTML = ''; more();
+    $('count').textContent = view.length.toLocaleString('en-IN') + (view.length === 1 ? ' document' : ' documents');
+  }
+  function more() {
+    var html = '';
+    view.slice(shown, shown + STEP).forEach(function (d) {
+      html += '<li class="doc"><a class="t" href="' + esc(d.u) + '" target="_blank" rel="noopener" data-track="open_document" data-doc="' +
+        esc(d.t.slice(0, 100)) + '" data-category="' + esc(d.c) + '">' + esc(d.t) + '</a>' +
+        '<span class="m">' + esc(d.c) + (d.y ? ' · ' + esc(d.y) : '') + ' · ' + esc(new URL(d.u).hostname.replace(/^www\./, '')) + '</span>' +
+        '<a class="ask" href="' + APP + '?q=' + encodeURIComponent('Explain this document: ' + d.t) + '" data-track="ask_about_document" data-doc="' +
+        esc(d.t.slice(0, 100)) + '">Ask about this →</a></li>';
+    });
+    $('list').insertAdjacentHTML('beforeend', html);
+    shown += STEP; $('more').hidden = shown >= view.length;
+  }
+  var timer;
+  $('q').addEventListener('input', function () {
+    clearTimeout(timer); apply();
+    timer = setTimeout(function () { var v = $('q').value.trim(); if (v.length > 2) window.track && track('library_search', {search_term: v.slice(0, 100)}); }, 1200);
+  });
+  $('sort').addEventListener('change', apply);
+  $('more').addEventListener('click', more);
+  document.querySelectorAll('.chip').forEach(function (b) {
+    b.addEventListener('click', function () {
+      cat = b.dataset.cat;
+      document.querySelectorAll('.chip').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      apply(); window.track && track('library_filter', {category: cat || 'All'});
+    });
+  });
+  var p = new URLSearchParams(location.search); if (p.get('q')) $('q').value = p.get('q');
+  fetch('docs.json').then(function (r) { return r.json(); }).then(function (d) { all = d; apply(); });
+})();
+</script>
+</main>
+<footer class="site"><div class="wrap">
+  <span>Service Rules Assistant is an independent project, not a government service. Answers explain the rules; they are not legal advice.</span>
+  <nav aria-label="Site"><a href="https://sherlyguides.github.io/service-rules-assistant/articles/">Articles</a><a href="https://sherlyguides.github.io/service-rules-assistant/library/">Library</a><a href="https://sherlyguides.github.io/service-rules-assistant/privacy/">Privacy</a><a href="https://sherlyguides.github.io/service-rules-assistant/terms/">Terms</a></nav>
+</div></footer>
+</body>
+</html>
