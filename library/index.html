@@ -35,7 +35,7 @@
   <div class="toolbar">
     <label class="sr" for="q" hidden>Search documents</label>
     <input class="search" id="q" type="search" placeholder="Search by title, number or subject…" autocomplete="off" spellcheck="false">
-    <select class="sort" id="sort" aria-label="Sort"><option value="new">Newest first</option><option value="az">A to Z</option></select>
+    <select class="sort" id="sort" aria-label="Sort"><option value="useful">Most useful first</option><option value="new">Newest first</option><option value="az">A to Z</option></select>
   </div>
   <div class="chips" role="group" aria-label="Category"><button class="chip" type="button" data-cat="" aria-pressed="true">All</button><button class="chip" type="button" data-cat="Central rules and orders" aria-pressed="false">Central rules and orders <span class="muted">59</span></button><button class="chip" type="button" data-cat="KVS and NVS" aria-pressed="false">KVS and NVS <span class="muted">88</span></button><button class="chip" type="button" data-cat="Supreme Court judgments" aria-pressed="false">Supreme Court judgments <span class="muted">158</span></button><button class="chip" type="button" data-cat="Delhi High Court judgments" aria-pressed="false">Delhi High Court judgments <span class="muted">672</span></button><button class="chip" type="button" data-cat="Delhi Police" aria-pressed="false">Delhi Police <span class="muted">402</span></button><button class="chip" type="button" data-cat="Criminal law" aria-pressed="false">Criminal law <span class="muted">57</span></button><button class="chip" type="button" data-cat="Delhi land and DDA" aria-pressed="false">Delhi land and DDA <span class="muted">112</span></button></div>
   <p class="count" id="count" aria-live="polite"></p>
@@ -45,7 +45,7 @@
 </div>
 <script>
 (function () {
-  var all = [], view = [], shown = 0, cat = '', STEP = 100, APP = "https://sherlyguides.github.io/vidhi-sahayak/";
+  var all = [], view = [], shown = 0, cat = '', STEP = 100, APP = "https://sherlyguides.github.io/vidhi-sahayak/", ORDER = ["Central rules and orders", "Discipline and vigilance", "KVS and NVS", "Supreme Court judgments", "Delhi High Court judgments", "Delhi Police", "Criminal law", "Delhi land and DDA"];
   var $ = function (id) { return document.getElementById(id); };
   function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
   function apply() {
@@ -55,8 +55,12 @@
       var t = d.t.toLowerCase();
       return words.every(function (w) { return t.indexOf(w) >= 0; });
     });
-    if ($('sort').value === 'az') view.sort(function (a, b) { return a.t.localeCompare(b.t); });
-    else view.sort(function (a, b) { return (b.d || '0').localeCompare(a.d || '0'); });
+    var s = $('sort').value;
+    if (s === 'az') view.sort(function (a, b) { return a.t.localeCompare(b.t); });
+    else view.sort(function (a, b) {
+      if (s === 'useful' && a.c !== b.c) return ORDER.indexOf(a.c) - ORDER.indexOf(b.c);
+      return (b.d || '0').localeCompare(a.d || '0');
+    });
     shown = 0; $('list').innerHTML = ''; more();
     $('count').textContent = view.length.toLocaleString('en-IN') + (view.length === 1 ? ' document' : ' documents');
   }

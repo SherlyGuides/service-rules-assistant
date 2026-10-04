@@ -160,7 +160,7 @@ def build_library() -> int:
   <div class="toolbar">
     <label class="sr" for="q" hidden>Search documents</label>
     <input class="search" id="q" type="search" placeholder="Search by title, number or subject…" autocomplete="off" spellcheck="false">
-    <select class="sort" id="sort" aria-label="Sort"><option value="new">Newest first</option><option value="az">A to Z</option></select>
+    <select class="sort" id="sort" aria-label="Sort"><option value="useful">Most useful first</option><option value="new">Newest first</option><option value="az">A to Z</option></select>
   </div>
   <div class="chips" role="group" aria-label="Category">{chips}</div>
   <p class="count" id="count" aria-live="polite"></p>
@@ -170,7 +170,7 @@ def build_library() -> int:
 </div>
 <script>
 (function () {{
-  var all = [], view = [], shown = 0, cat = '', STEP = 100, APP = {json.dumps(APP)};
+  var all = [], view = [], shown = 0, cat = '', STEP = 100, APP = {json.dumps(APP)}, ORDER = {json.dumps(CATEGORY_ORDER)};
   var $ = function (id) {{ return document.getElementById(id); }};
   function esc(s) {{ var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }}
   function apply() {{
@@ -180,8 +180,12 @@ def build_library() -> int:
       var t = d.t.toLowerCase();
       return words.every(function (w) {{ return t.indexOf(w) >= 0; }});
     }});
-    if ($('sort').value === 'az') view.sort(function (a, b) {{ return a.t.localeCompare(b.t); }});
-    else view.sort(function (a, b) {{ return (b.d || '0').localeCompare(a.d || '0'); }});
+    var s = $('sort').value;
+    if (s === 'az') view.sort(function (a, b) {{ return a.t.localeCompare(b.t); }});
+    else view.sort(function (a, b) {{
+      if (s === 'useful' && a.c !== b.c) return ORDER.indexOf(a.c) - ORDER.indexOf(b.c);
+      return (b.d || '0').localeCompare(a.d || '0');
+    }});
     shown = 0; $('list').innerHTML = ''; more();
     $('count').textContent = view.length.toLocaleString('en-IN') + (view.length === 1 ? ' document' : ' documents');
   }}
