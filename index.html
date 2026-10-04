@@ -48,6 +48,7 @@
   .hero { padding: 80px 0 72px; }
   .hero .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
   @media (max-width: 900px) { .hero .grid { grid-template-columns: 1fr; gap: 40px; } .hero { padding-top: 56px; } }
+  .hero .grid > * { min-width: 0; }  /* let long citations wrap instead of widening the page */
   .hero h1 { font: 400 clamp(38px, 6.4vw, 66px)/1.08 var(--serif); letter-spacing: -.8px; margin: 0 0 22px; max-width: 15ch; }
   .hero p.lede { font-size: clamp(18px, 2.2vw, 21px); color: var(--ink-2); max-width: 36ch; margin: 0 0 32px; }
   .hero .cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
@@ -74,7 +75,7 @@
   .chat .a p { margin: 0 0 .8em; } .chat .a p:last-child { margin: 0; }
   .chat .a ul { margin: 0 0 .8em; padding-left: 1.2em; }
   .chat .a strong { font-weight: 600; color: #fff; }
-  .cite { color: var(--link); border-bottom: 1px solid rgba(212, 183, 124, .3); white-space: nowrap; }
+  .cite { color: var(--link); border-bottom: 1px solid rgba(212, 183, 124, .3); }
   .chat .caption { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font: 13.5px/1.5 var(--sans); }
 
   /* topics */
