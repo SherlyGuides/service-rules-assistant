@@ -45,7 +45,9 @@
   @media (max-width: 760px) { .navlinks { display: none; } }
 
   /* hero */
-  .hero { padding: 88px 0 72px; }
+  .hero { padding: 80px 0 72px; }
+  .hero .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  @media (max-width: 900px) { .hero .grid { grid-template-columns: 1fr; gap: 40px; } .hero { padding-top: 56px; } }
   .hero h1 { font: 400 clamp(38px, 6.4vw, 66px)/1.08 var(--serif); letter-spacing: -.8px; margin: 0 0 22px; max-width: 15ch; }
   .hero p.lede { font-size: clamp(18px, 2.2vw, 21px); color: var(--ink-2); max-width: 36ch; margin: 0 0 32px; }
   .hero .cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
@@ -58,9 +60,9 @@
   .intro { color: var(--ink-2); max-width: 60ch; margin: 0 0 40px; }
 
   /* example answer */
-  .demo { display: grid; grid-template-columns: 1fr 1.25fr; gap: 48px; align-items: start; }
-  @media (max-width: 860px) { .demo { grid-template-columns: 1fr; gap: 28px; } }
-  .steps { list-style: none; padding: 0; margin: 0; counter-reset: s; }
+  .demo { display: block; }
+  .steps { list-style: none; padding: 0; margin: 8px 0 0; counter-reset: s; display: grid;
+           grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 32px; }
   .steps li { counter-increment: s; position: relative; padding: 0 0 22px 46px; color: var(--ink-2); }
   .steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%;
                       border: 1px solid var(--line-strong); display: grid; place-items: center; font: 600 14px/1 var(--sans); color: var(--ink); }
@@ -76,9 +78,10 @@
   .chat .caption { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font: 13.5px/1.5 var(--sans); }
 
   /* topics */
-  .topics { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1px; background: var(--line);
-            border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
-  .topic { background: var(--bg); padding: 22px; }
+  .topics { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .topic { padding: 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  @media (max-width: 860px) { .topics { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .topics { grid-template-columns: 1fr; } }
   .topic h3 { font: 600 17px/1.3 var(--serif); margin: 0 0 6px; }
   .topic p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.55; }
 
@@ -118,15 +121,28 @@
 </nav>
 
 <header class="hero">
-  <div class="wrap">
+  <div class="wrap grid">
+   <div>
     <h1>Service rules, answered from the rule book.</h1>
     <p class="lede">Ask about pay, leave, pension, conduct or a departmental enquiry. The answer comes from the official rules and orders, with the rule and page cited after each point.</p>
     <div class="cta">
       <a class="btn" href="https://sherlyguides.github.io/vidhi-sahayak/">Open the assistant
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      <a class="btn ghost" href="#how">See an example</a>
+      <a class="btn ghost" href="#how">How it works</a>
     </div>
     <p class="note">Free to use. No sign-up. English, Hindi or Hinglish.</p>
+   </div>
+    <div class="chat" aria-label="Example answer">
+        <div class="q"><span>Can I take earned leave during probation?</span></div>
+        <div class="a">
+          <p>Yes. Under the central rules, a probationer is entitled to leave, including earned leave, "as if he had held his post substantively otherwise than on probation" <span class="cite">(CCS (Leave) Rules 1972, Rule 33(1)(a), PDF p. 26)</span>.</p>
+          <ul>
+            <li><strong>Leave is not a right.</strong> Your sanctioning authority can refuse it or cancel it if work requires <span class="cite">(Rule 7, PDF p. 7)</span>.</li>
+            <li><strong>If your services are being terminated,</strong> leave can't go beyond the end of your probation or the termination date <span class="cite">(Rule 33(1)(b), PDF pp. 26–27)</span>.</li>
+          </ul>
+        </div>
+        <div class="caption">A real answer, shortened. In the app each citation is a link to the official PDF.</div>
+      </div>
   </div>
 </header>
 
@@ -141,17 +157,7 @@
         <li><strong>It answers with the source</strong>Each statement names the rule and the page, and the link opens the official PDF at that page.</li>
         <li><strong>It says what it doesn't have</strong>If the official document isn't in its library, it says so instead of guessing.</li>
       </ol>
-      <div class="chat" aria-label="Example answer">
-        <div class="q"><span>Can I take earned leave during probation?</span></div>
-        <div class="a">
-          <p>Yes. Under the central rules, a probationer is entitled to leave, including earned leave, "as if he had held his post substantively otherwise than on probation" <span class="cite">(CCS (Leave) Rules 1972, Rule 33(1)(a), PDF p. 26)</span>.</p>
-          <ul>
-            <li><strong>Leave is not a right.</strong> Your sanctioning authority can refuse it or cancel it if work requires <span class="cite">(Rule 7, PDF p. 7)</span>.</li>
-            <li><strong>If your services are being terminated,</strong> leave can't go beyond the end of your probation or the termination date <span class="cite">(Rule 33(1)(b), PDF pp. 26–27)</span>.</li>
-          </ul>
-        </div>
-        <div class="caption">A real answer, shortened. In the app each citation is a link to the official PDF.</div>
-      </div>
+</div>
     </div>
   </div>
 </section>
