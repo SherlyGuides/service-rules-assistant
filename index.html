@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#141414">
+<title>Service Rules Assistant</title>
+<meta name="description" content="Ask questions about Indian Central Government service rules and get answers from the official rules, with the page cited.">
+<meta property="og:title" content="Service Rules Assistant">
+<meta property="og:description" content="Answers to Central Government service-rule questions from the official rules, with the page cited.">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #141414; --surface: #1c1c1c; --surface-2: #242424; --line: #2b2b2b; --line-strong: #3a3a3a;
+    --ink: #ececec; --ink-2: #c2c2c2; --muted: #8a8a8a; --accent: #ebe6da; --accent-ink: #141414; --link: #d4b77c;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --col: 1040px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.65 var(--sans); }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .wrap { max-width: var(--col); margin: 0 auto; padding: 0 20px; }
+
+  /* nav */
+  nav { position: sticky; top: 0; z-index: 10; background: rgba(20, 20, 20, .88); backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+  nav .wrap { display: flex; align-items: center; gap: 24px; height: 60px; }
+  .wordmark { font: 600 18px/1 var(--serif); color: var(--ink); flex: 1; white-space: nowrap; }
+  .wordmark:hover { text-decoration: none; }
+  .navlinks { display: flex; gap: 22px; font-size: 15px; }
+  .navlinks a { color: var(--ink-2); }
+  .btn { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: var(--accent-ink);
+         font: 600 15px/1 var(--sans); padding: 12px 18px; border-radius: 999px; white-space: nowrap; }
+  .btn:hover { text-decoration: none; filter: brightness(1.06); }
+  .btn.small { padding: 9px 14px; font-size: 14px; }
+  .btn.ghost { background: none; color: var(--ink); border: 1px solid var(--line-strong); }
+  @media (max-width: 760px) { .navlinks { display: none; } }
+
+  /* hero */
+  .hero { padding: 88px 0 72px; }
+  .hero h1 { font: 400 clamp(38px, 6.4vw, 66px)/1.08 var(--serif); letter-spacing: -.8px; margin: 0 0 22px; max-width: 15ch; }
+  .hero p.lede { font-size: clamp(18px, 2.2vw, 21px); color: var(--ink-2); max-width: 36ch; margin: 0 0 32px; }
+  .hero .cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .hero .note { color: var(--muted); font-size: 14px; margin-top: 18px; }
+
+  /* sections */
+  section { padding: 72px 0; border-top: 1px solid var(--line); }
+  .eyebrow { font: 600 13px/1 var(--sans); letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  h2 { font: 400 clamp(28px, 4vw, 40px)/1.15 var(--serif); letter-spacing: -.4px; margin: 0 0 18px; max-width: 22ch; }
+  .intro { color: var(--ink-2); max-width: 60ch; margin: 0 0 40px; }
+
+  /* example answer */
+  .demo { display: grid; grid-template-columns: 1fr 1.25fr; gap: 48px; align-items: start; }
+  @media (max-width: 860px) { .demo { grid-template-columns: 1fr; gap: 28px; } }
+  .steps { list-style: none; padding: 0; margin: 0; counter-reset: s; }
+  .steps li { counter-increment: s; position: relative; padding: 0 0 22px 46px; color: var(--ink-2); }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%;
+                      border: 1px solid var(--line-strong); display: grid; place-items: center; font: 600 14px/1 var(--sans); color: var(--ink); }
+  .steps li strong { color: var(--ink); font-weight: 600; display: block; }
+  .chat { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 22px; }
+  .chat .q { display: flex; justify-content: flex-end; margin-bottom: 18px; }
+  .chat .q span { background: var(--surface-2); padding: 9px 15px; border-radius: 18px; font-size: 15px; }
+  .chat .a { font: 16.5px/1.7 var(--serif); }
+  .chat .a p { margin: 0 0 .8em; } .chat .a p:last-child { margin: 0; }
+  .chat .a ul { margin: 0 0 .8em; padding-left: 1.2em; }
+  .chat .a strong { font-weight: 600; color: #fff; }
+  .cite { color: var(--link); border-bottom: 1px solid rgba(212, 183, 124, .3); white-space: nowrap; }
+  .chat .caption { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font: 13.5px/1.5 var(--sans); }
+
+  /* topics */
+  .topics { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1px; background: var(--line);
+            border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+  .topic { background: var(--bg); padding: 22px; }
+  .topic h3 { font: 600 17px/1.3 var(--serif); margin: 0 0 6px; }
+  .topic p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.55; }
+
+  /* library */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 28px 24px; margin-bottom: 36px; }
+  .stat b { display: block; font: 400 clamp(34px, 4.6vw, 46px)/1 var(--serif); letter-spacing: -.5px; margin-bottom: 8px; }
+  .stat span { color: var(--muted); font-size: 15px; }
+  .sources { color: var(--ink-2); max-width: 70ch; }
+
+  /* phone */
+  .phone { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 24px; }
+  .card h3 { font: 600 17px/1.3 var(--serif); margin: 0 0 10px; }
+  .card ol { margin: 0; padding-left: 1.2em; color: var(--ink-2); }
+  .card li { margin: 4px 0; }
+
+  /* notes */
+  .notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px 40px; }
+  .notes h3 { font: 600 17px/1.3 var(--serif); margin: 0 0 8px; }
+  .notes p { margin: 0; color: var(--ink-2); font-size: 16px; }
+
+  /* closing */
+  .closing { text-align: center; padding: 96px 0; }
+  .closing h2 { margin: 0 auto 26px; }
+  footer { border-top: 1px solid var(--line); padding: 28px 0 calc(28px + env(safe-area-inset-bottom)); color: var(--muted); font-size: 14px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="wordmark" href="#">Service Rules Assistant</a>
+    <div class="navlinks"><a href="#how">How it works</a><a href="#library">Library</a><a href="#notes">Good to know</a></div>
+    <a class="btn small" href="https://sherlyguides.github.io/vidhi-sahayak/">Open</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Service rules, answered from the rule book.</h1>
+    <p class="lede">Ask about pay, leave, pension, conduct or a departmental enquiry. The answer comes from the official rules and orders, with the rule and page cited after each point.</p>
+    <div class="cta">
+      <a class="btn" href="https://sherlyguides.github.io/vidhi-sahayak/">Open the assistant
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn ghost" href="#how">See an example</a>
+    </div>
+    <p class="note">Free to use. No sign-up. English, Hindi or Hinglish.</p>
+  </div>
+</header>
+
+<section id="how">
+  <div class="wrap">
+    <p class="eyebrow">How it works</p>
+    <h2>It looks the rule up before it answers.</h2>
+    <div class="demo">
+      <ol class="steps">
+        <li><strong>You ask in your own words</strong>Type a question, or attach a photo, PDF or Word file of an order or notice.</li>
+        <li><strong>It searches the library</strong>Rules, office memoranda, manuals and court judgments, and reads the relevant provisions in full.</li>
+        <li><strong>It answers with the source</strong>Each statement names the rule and the page, and the link opens the official PDF at that page.</li>
+        <li><strong>It says what it doesn't have</strong>If the official document isn't in its library, it says so instead of guessing.</li>
+      </ol>
+      <div class="chat" aria-label="Example answer">
+        <div class="q"><span>Can I take earned leave during probation?</span></div>
+        <div class="a">
+          <p>Yes. Under the central rules, a probationer is entitled to leave, including earned leave, "as if he had held his post substantively otherwise than on probation" <span class="cite">(CCS (Leave) Rules 1972, Rule 33(1)(a), PDF p. 26)</span>.</p>
+          <ul>
+            <li><strong>Leave is not a right.</strong> Your sanctioning authority can refuse it or cancel it if work requires <span class="cite">(Rule 7, PDF p. 7)</span>.</li>
+            <li><strong>If your services are being terminated,</strong> leave can't go beyond the end of your probation or the termination date <span class="cite">(Rule 33(1)(b), PDF pp. 26–27)</span>.</li>
+          </ul>
+        </div>
+        <div class="caption">A real answer, shortened. In the app each citation is a link to the official PDF.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">What you can ask about</p>
+    <h2>Built for the questions people actually have at work.</h2>
+    <div class="topics">
+      <div class="topic"><h3>Pay and allowances</h3><p>DA, HRA, pay matrix, increments, MACP, TA and LTC.</p></div>
+      <div class="topic"><h3>Leave</h3><p>Earned, half-pay, child care and maternity leave, and vacation staff.</p></div>
+      <div class="topic"><h3>Retirement and pension</h3><p>CCS (Pension) Rules 2021, NPS and UPS, gratuity and family pension.</p></div>
+      <div class="topic"><h3>Conduct and discipline</h3><p>Conduct rules, suspension, charge sheets, inquiries and appeals.</p></div>
+      <div class="topic"><h3>Health</h3><p>CGHS rules and package rates, and medical reimbursement.</p></div>
+      <div class="topic"><h3>Office procedure and finance</h3><p>CSMOP 2022, General Financial Rules 2017, delegation of financial powers.</p></div>
+      <div class="topic"><h3>KVS and NVS teachers</h3><p>Transfer policies, the KVS Education Code, recruitment and leave orders.</p></div>
+      <div class="topic"><h3>Delhi Police</h3><p>Punishment and Appeal Rules, Standing Orders, and departmental enquiry case law.</p></div>
+      <div class="topic"><h3>Criminal law and land</h3><p>BNS, BNSS and BSA, the NI Act, and Delhi land and DDA procedures.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="library">
+  <div class="wrap">
+    <p class="eyebrow">The library</p>
+    <h2>More than 1,500 official documents, searched on every question.</h2>
+    <p class="intro">The assistant answers from its own library of official texts, not from memory. It is updated as new orders and documents are added.</p>
+    <div class="stats">
+      <div class="stat"><b>69</b><span>central rules, manuals and recent government orders</span></div>
+      <div class="stat"><b>832</b><span>judgments of the Supreme Court and the Delhi High Court</span></div>
+      <div class="stat"><b>418</b><span>Delhi Police rules, Standing Orders and circulars</span></div>
+      <div class="stat"><b>88</b><span>KVS, NVS and school-education documents</span></div>
+      <div class="stat"><b>169</b><span>criminal and land statutes, procedures and guidance</span></div>
+    </div>
+    <p class="sources">Sources include the Department of Personnel and Training, the Department of Expenditure, DARPG, India Code, the Supreme Court and Delhi High Court judgment archives, Delhi Police, KVS and NVS. Citations link back to the official copy wherever one is published online.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">On your phone</p>
+    <h2>Keep it on your home screen.</h2>
+    <p class="intro">It works in any browser. Added to your home screen, it opens full-screen like an app.</p>
+    <div class="phone">
+      <div class="card"><h3>iPhone</h3><ol><li>Open the assistant in Safari.</li><li>Tap the Share button.</li><li>Choose <em>Add to Home Screen</em>.</li></ol></div>
+      <div class="card"><h3>Android</h3><ol><li>Open the assistant in Chrome.</li><li>Tap the ⋮ menu.</li><li>Choose <em>Add to Home screen</em> or <em>Install app</em>.</li></ol></div>
+    </div>
+  </div>
+</section>
+
+<section id="notes">
+  <div class="wrap">
+    <p class="eyebrow">Good to know</p>
+    <h2>What it is, and what it isn't.</h2>
+    <div class="notes">
+      <div><h3>Information, not legal advice</h3><p>It explains what the rules say. For a decision that matters, check the cited rule yourself, and take advice on serious matters such as a penalty or a court case.</p></div>
+      <div><h3>Not a government website</h3><p>This is an independent project. It is not run by, or affiliated with, the Government of India or any department.</p></div>
+      <div><h3>Your organisation's own rules</h3><p>Some employers adopt the central rules with changes. Where that may apply, the assistant says so and tells you where to confirm.</p></div>
+      <div><h3>Questions are recorded</h3><p>Questions, attached files and the internet address they come from are recorded to check and improve answers. Leave out names and personal details you don't need to share.</p></div>
+      <div><h3>Answers are written by AI</h3><p>Answers come from AI models (Anthropic's Claude, and Google's Gemini as a backup), working only from the library above. They can still make mistakes; the citations let you check.</p></div>
+      <div><h3>Still being tested</h3><p>It is in early use and improving. If an answer is wrong or a document is missing, that is useful to know.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="wrap">
+    <h2>Have a question about your service rules?</h2>
+    <a class="btn" href="https://sherlyguides.github.io/vidhi-sahayak/">Open the assistant
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Service Rules Assistant · an independent project, not a government service</span>
+    <span>Answers are information, not legal advice.</span>
+  </div>
+</footer>
+
+</body>
+</html>
