@@ -470,6 +470,13 @@ document.getElementById('fb').addEventListener('submit', async function (e) {{
                                       "feedback/", body))
 
 
+# ---------------------------------------------------------------- active users (shown when the laptop is off)
+def build_stats() -> None:
+    sys.path.insert(0, os.path.join(ROOT, "bot"))
+    import usage
+    write("stats.json", json.dumps(usage.active_users()))
+
+
 # ---------------------------------------------------------------- sitemap
 def build_sitemap(arts: list[dict]) -> None:
     urls = [("", TODAY), ("latest/", TODAY), ("library/", TODAY), ("articles/", TODAY), ("feedback/", TODAY), ("privacy/", TODAY), ("terms/", TODAY)] + \
@@ -485,5 +492,6 @@ if __name__ == "__main__":
     build_articles(arts)
     build_policies()
     build_feedback()
+    build_stats()
     build_sitemap(arts)
     print(f"library: {n} documents · latest: {latest} · articles: {len(arts)} · policies · sitemap")
