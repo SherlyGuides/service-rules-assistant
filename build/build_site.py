@@ -87,7 +87,7 @@ def page(title: str, description: str, path: str, body: str, active: str = "", h
 </main>
 <footer class="site"><div class="wrap">
   <span>{E(NAME)} is an independent project, not a government service. Answers explain the rules; they are not legal advice.</span>
-  <nav aria-label="Site"><a href="{BASE}latest/">Latest</a><a href="{BASE}articles/">Articles</a><a href="{BASE}library/">Library</a><a href="{BASE}privacy/">Privacy</a><a href="{BASE}terms/">Terms</a></nav>
+  <nav aria-label="Site"><a href="{BASE}latest/">Latest</a><a href="{BASE}articles/">Articles</a><a href="{BASE}library/">Library</a><a href="{BASE}feedback/">Suggest</a><a href="{BASE}privacy/">Privacy</a><a href="{BASE}terms/">Terms</a></nav>
 </div></footer>
 </body>
 </html>
@@ -352,8 +352,8 @@ def build_policies() -> None:
     <li>Ask us for a copy of your data, to correct it, or to delete it, by writing to the Grievance Officer below.</li>
     <li>You can block analytics cookies in your browser; the site still works.</li>
   </ul>
-  <h2>Age</h2>
-  <p>The service is for people aged 18 and over.</p>
+  <h2>Who It Is For</h2>
+  <p>The service is built for serving and retired government employees, and the people who advise them on service matters.</p>
   <h2>Security</h2>
   <p>Data is stored on access-controlled systems and sent over encrypted connections. No system is perfectly secure; if a breach affects you, we will tell you.</p>
   <h2>Contact and Grievances</h2>
@@ -423,9 +423,56 @@ def build_latest() -> int:
     return len(rows)
 
 
+# ---------------------------------------------------------------- requests and feedback
+def build_feedback() -> None:
+    body = f"""<div class="wrap narrow article">
+  <h1>Tell Us What You Want</h1>
+  <p class="lead">A document you need, a feature you wish it had, an answer that was wrong, or anything else. Every message is read.</p>
+  <form id="fb" style="display:grid;gap:14px;max-width:560px">
+    <label>What is it about?
+      <select id="kind" class="search" style="width:100%;margin-top:6px">
+        <option value="document">Add a document or order</option>
+        <option value="feature">A new feature (e.g. fill a form for me, a calculator)</option>
+        <option value="wrong_answer">An answer was wrong</option>
+        <option value="complaint">A complaint</option>
+        <option value="other">Something else</option>
+      </select></label>
+    <label>Tell us more
+      <textarea id="text" required rows="6" class="search" style="width:100%;height:auto;padding:12px 16px;margin-top:6px" placeholder="What would you like to happen?"></textarea></label>
+    <label>Phone or email, if you want a reply (optional)
+      <input id="contact" class="search" style="width:100%;margin-top:6px" autocomplete="email"></label>
+    <button class="btn btn-primary" type="submit" style="justify-self:start">Send</button>
+    <p id="msg" class="muted" aria-live="polite"></p>
+  </form>
+  <p class="note">We use this only to improve the service. See the <a href="{BASE}privacy/">Privacy Policy</a>.</p>
+</div>
+<script>
+document.getElementById('fb').addEventListener('submit', async function (e) {{
+  e.preventDefault();
+  var msg = document.getElementById('msg'), text = document.getElementById('text').value.trim();
+  if (!text) return;
+  msg.textContent = 'Sending…';
+  try {{
+    var c = await (await fetch('{APP}config.json?t=' + Date.now(), {{cache: 'no-store'}})).json();
+    var body = JSON.stringify({{kind: document.getElementById('kind').value, text: text,
+      contact: document.getElementById('contact').value, page: 'website'}});
+    var ok = false;
+    for (var s of [c.server, c.fallback].filter(Boolean)) {{
+      try {{ var r = await fetch(s + '/v1/feedback', {{method: 'POST', headers: {{'Content-Type': 'application/json'}}, body: body}});
+            if (r.ok) {{ ok = true; break; }} }} catch (err) {{}}
+    }}
+    msg.textContent = ok ? 'Thank you. It has reached the team.' : 'Could not send right now. Please try again later.';
+    if (ok) {{ document.getElementById('text').value = ''; window.track && track('feedback_sent', {{kind: document.getElementById('kind').value}}); }}
+  }} catch (err) {{ msg.textContent = 'Could not send right now. Please try again later.'; }}
+}});
+</script>"""
+    write("feedback/index.html", page(f"Tell Us What You Want | {NAME}", f"Request a document or feature, or report a wrong answer, for {NAME}.",
+                                      "feedback/", body))
+
+
 # ---------------------------------------------------------------- sitemap
 def build_sitemap(arts: list[dict]) -> None:
-    urls = [("", TODAY), ("latest/", TODAY), ("library/", TODAY), ("articles/", TODAY), ("privacy/", TODAY), ("terms/", TODAY)] + \
+    urls = [("", TODAY), ("latest/", TODAY), ("library/", TODAY), ("articles/", TODAY), ("feedback/", TODAY), ("privacy/", TODAY), ("terms/", TODAY)] + \
            [(f"articles/{a['slug']}/", a.get("last_checked") or TODAY) for a in arts]
     write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
           "".join(f"  <url><loc>{E(BASE + u)}</loc><lastmod>{d}</lastmod></url>\n" for u, d in urls) + "</urlset>\n")
@@ -437,5 +484,6 @@ if __name__ == "__main__":
     arts = load_articles()
     build_articles(arts)
     build_policies()
+    build_feedback()
     build_sitemap(arts)
     print(f"library: {n} documents · latest: {latest} · articles: {len(arts)} · policies · sitemap")

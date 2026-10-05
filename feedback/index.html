@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0b0c">
+<title>Tell Us What You Want | Service Rules Assistant</title>
+<meta name="description" content="Request a document or feature, or report a wrong answer, for Service Rules Assistant.">
+<link rel="canonical" href="https://sherlyguides.github.io/service-rules-assistant/feedback/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tell Us What You Want | Service Rules Assistant">
+<meta property="og:description" content="Request a document or feature, or report a wrong answer, for Service Rules Assistant.">
+<meta property="og:url" content="https://sherlyguides.github.io/service-rules-assistant/feedback/">
+<meta property="og:image" content="https://sherlyguides.github.io/service-rules-assistant/img/og.jpg">
+
+<link rel="icon" href="https://sherlyguides.github.io/service-rules-assistant/icon.svg" type="image/svg+xml">
+<link rel="preload" href="https://sherlyguides.github.io/service-rules-assistant/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="https://sherlyguides.github.io/service-rules-assistant/assets/site.css">
+<script>window.SRA = {ga: ""};</script>
+<script src="https://sherlyguides.github.io/service-rules-assistant/assets/analytics.js" defer></script>
+
+</head>
+<body>
+<a class="skip" href="#main">Skip to Content</a>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="https://sherlyguides.github.io/service-rules-assistant/"><img src="https://sherlyguides.github.io/service-rules-assistant/icon.svg" alt="" width="26" height="26"><span translate="no">Service Rules Assistant</span></a>
+  <nav class="navlinks" aria-label="Sections"><a href="https://sherlyguides.github.io/service-rules-assistant/latest/">Latest</a><a href="https://sherlyguides.github.io/service-rules-assistant/articles/">Articles</a><a href="https://sherlyguides.github.io/service-rules-assistant/library/">Library</a></nav>
+  <a class="btn btn-primary btn-sm" href="https://sherlyguides.github.io/vidhi-sahayak/" data-track="open_assistant" data-from="feedback/"><span>Open<span class="long"> the Assistant</span></span></a>
+</div></header>
+<main id="main">
+<div class="wrap narrow article">
+  <h1>Tell Us What You Want</h1>
+  <p class="lead">A document you need, a feature you wish it had, an answer that was wrong, or anything else. Every message is read.</p>
+  <form id="fb" style="display:grid;gap:14px;max-width:560px">
+    <label>What is it about?
+      <select id="kind" class="search" style="width:100%;margin-top:6px">
+        <option value="document">Add a document or order</option>
+        <option value="feature">A new feature (e.g. fill a form for me, a calculator)</option>
+        <option value="wrong_answer">An answer was wrong</option>
+        <option value="complaint">A complaint</option>
+        <option value="other">Something else</option>
+      </select></label>
+    <label>Tell us more
+      <textarea id="text" required rows="6" class="search" style="width:100%;height:auto;padding:12px 16px;margin-top:6px" placeholder="What would you like to happen?"></textarea></label>
+    <label>Phone or email, if you want a reply (optional)
+      <input id="contact" class="search" style="width:100%;margin-top:6px" autocomplete="email"></label>
+    <button class="btn btn-primary" type="submit" style="justify-self:start">Send</button>
+    <p id="msg" class="muted" aria-live="polite"></p>
+  </form>
+  <p class="note">We use this only to improve the service. See the <a href="https://sherlyguides.github.io/service-rules-assistant/privacy/">Privacy Policy</a>.</p>
+</div>
+<script>
+document.getElementById('fb').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  var msg = document.getElementById('msg'), text = document.getElementById('text').value.trim();
+  if (!text) return;
+  msg.textContent = 'Sending…';
+  try {
+    var c = await (await fetch('https://sherlyguides.github.io/vidhi-sahayak/config.json?t=' + Date.now(), {cache: 'no-store'})).json();
+    var body = JSON.stringify({kind: document.getElementById('kind').value, text: text,
+      contact: document.getElementById('contact').value, page: 'website'});
+    var ok = false;
+    for (var s of [c.server, c.fallback].filter(Boolean)) {
+      try { var r = await fetch(s + '/v1/feedback', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: body});
+            if (r.ok) { ok = true; break; } } catch (err) {}
+    }
+    msg.textContent = ok ? 'Thank you. It has reached the team.' : 'Could not send right now. Please try again later.';
+    if (ok) { document.getElementById('text').value = ''; window.track && track('feedback_sent', {kind: document.getElementById('kind').value}); }
+  } catch (err) { msg.textContent = 'Could not send right now. Please try again later.'; }
+});
+</script>
+</main>
+<footer class="site"><div class="wrap">
+  <span>Service Rules Assistant is an independent project, not a government service. Answers explain the rules; they are not legal advice.</span>
+  <nav aria-label="Site"><a href="https://sherlyguides.github.io/service-rules-assistant/latest/">Latest</a><a href="https://sherlyguides.github.io/service-rules-assistant/articles/">Articles</a><a href="https://sherlyguides.github.io/service-rules-assistant/library/">Library</a><a href="https://sherlyguides.github.io/service-rules-assistant/feedback/">Suggest</a><a href="https://sherlyguides.github.io/service-rules-assistant/privacy/">Privacy</a><a href="https://sherlyguides.github.io/service-rules-assistant/terms/">Terms</a></nav>
+</div></footer>
+</body>
+</html>
