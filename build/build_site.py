@@ -479,6 +479,20 @@ def build_stats() -> None:
 
 
 # ---------------------------------------------------------------- documents the library still needs
+NEEDED_CSS = """<style>
+@media (max-width: 680px) {
+  .article table.needed { display: block; overflow: visible; font-size: 15px; }
+  table.needed thead { display: none; }
+  table.needed tbody, table.needed tr, table.needed td { display: block; }
+  table.needed tr { border-bottom: 1px solid var(--hairline); padding: 12px 0; }
+  table.needed td { border: 0; padding: 2px 0; }
+  table.needed td:first-child { color: var(--ink); font-weight: 500; padding-bottom: 6px; }
+  table.needed td[data-l]:not(:empty)::before { content: attr(data-l) ": "; color: var(--ink-tertiary); }
+  table.needed td[data-l]:empty { display: none; }
+}
+</style>"""
+
+
 def build_needed() -> None:
     sys.path.insert(0, os.path.join(SITE, "build"))
     import needed_docs as nd
@@ -491,11 +505,11 @@ def build_needed() -> None:
     secs = []
     for i, (title, note, rows) in enumerate(nd.SECTIONS, 1):
         trs = "".join(
-            f"<tr><td>{E(d)}</td><td class='muted'>{E(r)}</td><td>{E(w)}</td>"
-            f"<td>{'<b>High</b>' if p == 'H' else '<span class=muted>Medium</span>'}</td></tr>"
+            f"<tr><td>{E(d)}</td><td class='muted' data-l='Reference'>{E(r)}</td><td data-l='Who has it'>{E(w)}</td>"
+            f"<td data-l='Priority'>{'<b>High</b>' if p == 'H' else '<span class=muted>Medium</span>'}</td></tr>"
             for d, r, w, p in rows)
         secs.append(f'<h2 id="s{i}">{E(title)}</h2>' + (f"<p class='muted'>{E(note)}</p>" if note else "")
-                    + f"<table><thead><tr><th>Document</th><th>Reference</th><th>Who is likely to have it</th>"
+                    + f"<table class='needed'><thead><tr><th>Document</th><th>Reference</th><th>Who is likely to have it</th>"
                       f"<th>Priority</th></tr></thead><tbody>{trs}</tbody></table>")
     dl = "".join(f'<li><a href="{E(u)}" rel="noopener">{E(t)}</a></li>' for t, u in nd.DOWNLOADS)
     qs = "".join(f"<li>{E(q)}</li>" for q in nd.QUESTIONS)
@@ -522,7 +536,7 @@ def build_needed() -> None:
     write("needed/index.html", page(f"Help Build the Library | {NAME}",
                                     f"{total} official documents on service rules for Delhi Government teachers, guest teachers, "
                                     "KVS, NVS, Delhi Police and Central Government staff that the library still needs.",
-                                    "needed/", body))
+                                    "needed/", body, head=NEEDED_CSS))
 
 
 # ---------------------------------------------------------------- sitemap
