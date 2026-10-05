@@ -50,7 +50,7 @@ def page(title: str, description: str, path: str, body: str, active: str = "", h
     verify = (f'<meta name="google-site-verification" content="{E(CFG["google_site_verification"])}">'
               if CFG.get("google_site_verification") else "")
     nav = "".join(f'<a href="{BASE}{p}"{" aria-current=\"page\"" if active == k else ""}>{k}</a>'
-                  for k, p in (("Articles", "articles/"), ("Library", "library/"), ("How It Works", "#how")))
+                  for k, p in (("Latest", "latest/"), ("Articles", "articles/"), ("Library", "library/")))
     nav = nav.replace(f'{BASE}#how', f'{BASE}#how')
     return f"""<!doctype html>
 <html lang="en">
@@ -87,7 +87,7 @@ def page(title: str, description: str, path: str, body: str, active: str = "", h
 </main>
 <footer class="site"><div class="wrap">
   <span>{E(NAME)} is an independent project, not a government service. Answers explain the rules; they are not legal advice.</span>
-  <nav aria-label="Site"><a href="{BASE}articles/">Articles</a><a href="{BASE}library/">Library</a><a href="{BASE}privacy/">Privacy</a><a href="{BASE}terms/">Terms</a></nav>
+  <nav aria-label="Site"><a href="{BASE}latest/">Latest</a><a href="{BASE}articles/">Articles</a><a href="{BASE}library/">Library</a><a href="{BASE}privacy/">Privacy</a><a href="{BASE}terms/">Terms</a></nav>
 </div></footer>
 </body>
 </html>
@@ -389,9 +389,43 @@ def build_policies() -> None:
     write("terms/index.html", page(f"Terms of Use | {NAME}", f"The terms for using {NAME}.", "terms/", terms))
 
 
+# ---------------------------------------------------------------- latest notifications
+NOTIF = os.path.join(ROOT, "_claude", "corpus", "central_rules", "notifications")
+
+
+def build_latest() -> int:
+    """Newest official orders from the notifications collection (kept current by bot/tracker/)."""
+    rows = []
+    for mf in glob.glob(os.path.join(NOTIF, "*", "_manifest.json")):
+        try:
+            for r in json.load(open(mf, encoding="utf-8")):
+                if r.get("source", "").startswith("http") and r.get("date"):
+                    rows.append(r)
+        except Exception:
+            continue
+    rows.sort(key=lambda r: r["date"], reverse=True)
+    rows = rows[:200]
+    items = "".join(
+        f'<li class="doc"><a class="t" href="{E(r["source"])}" target="_blank" rel="noopener" data-track="open_document" '
+        f'data-doc="{E(r["title"][:100])}" data-category="Latest notifications">{E(r.get("subject") or r["title"])}</a>'
+        f'<span class="m">{E(r.get("issuer", ""))}{" · " + E(r["number"]) if r.get("number") else ""} · {pretty_date(r["date"])}</span>'
+        f'<a class="ask" href="{APP}?q={E(json.dumps("Explain this order: " + r["title"])[1:-1])}" data-track="ask_about_document" '
+        f'data-doc="{E(r["title"][:100])}">Ask about this →</a></li>' for r in rows)
+    body = f"""<div class="wrap">
+  <h1>Latest Notifications</h1>
+  <p class="lead">New office memoranda, orders and notifications from DoPT, the Department of Expenditure, the Department of Pension and Pensioners' Welfare, CGHS and the GPF interest notifications, checked daily. Each link opens the official copy. Updated {pretty_date(TODAY)}.</p>
+  <ul class="doclist">{items}</ul>
+  <p class="note">Showing the newest {len(rows)}. Older orders are in the <a href="{BASE}library/">Library</a>.</p>
+</div>"""
+    write("latest/index.html", page(f"Latest Central Government Notifications and Orders | {NAME}",
+                                    "New DoPT, Department of Expenditure, pension and CGHS orders for Central Government employees, checked daily, with links to the official copies.",
+                                    "latest/", body, active="Latest"))
+    return len(rows)
+
+
 # ---------------------------------------------------------------- sitemap
 def build_sitemap(arts: list[dict]) -> None:
-    urls = [("", TODAY), ("library/", TODAY), ("articles/", TODAY), ("privacy/", TODAY), ("terms/", TODAY)] + \
+    urls = [("", TODAY), ("latest/", TODAY), ("library/", TODAY), ("articles/", TODAY), ("privacy/", TODAY), ("terms/", TODAY)] + \
            [(f"articles/{a['slug']}/", a.get("last_checked") or TODAY) for a in arts]
     write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
           "".join(f"  <url><loc>{E(BASE + u)}</loc><lastmod>{d}</lastmod></url>\n" for u, d in urls) + "</urlset>\n")
@@ -399,8 +433,9 @@ def build_sitemap(arts: list[dict]) -> None:
 
 if __name__ == "__main__":
     n = build_library()
+    latest = build_latest()
     arts = load_articles()
     build_articles(arts)
     build_policies()
     build_sitemap(arts)
-    print(f"library: {n} documents · articles: {len(arts)} · policies · sitemap")
+    print(f"library: {n} documents · latest: {latest} · articles: {len(arts)} · policies · sitemap")
