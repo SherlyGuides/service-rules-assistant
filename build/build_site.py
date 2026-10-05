@@ -87,7 +87,7 @@ def page(title: str, description: str, path: str, body: str, active: str = "", h
 </main>
 <footer class="site"><div class="wrap">
   <span>{E(NAME)} is an independent project, not a government service. Answers explain the rules; they are not legal advice.</span>
-  <nav aria-label="Site"><a href="{BASE}latest/">Latest</a><a href="{BASE}articles/">Articles</a><a href="{BASE}library/">Library</a><a href="{BASE}feedback/">Suggest</a><a href="{BASE}privacy/">Privacy</a><a href="{BASE}terms/">Terms</a></nav>
+  <nav aria-label="Site"><a href="{BASE}latest/">Latest</a><a href="{BASE}articles/">Articles</a><a href="{BASE}library/">Library</a><a href="{BASE}needed/">Help Build the Library</a><a href="{BASE}feedback/">Suggest</a><a href="{BASE}privacy/">Privacy</a><a href="{BASE}terms/">Terms</a></nav>
 </div></footer>
 </body>
 </html>
@@ -157,6 +157,7 @@ def build_library() -> int:
     body = f"""<div class="wrap">
   <h1>Library of Official Documents</h1>
   <p class="lead">{len(docs):,} rules, orders, notifications, manuals and judgments the assistant answers from. Every link opens the official copy. Updated {pretty_date(TODAY)}.</p>
+  <p class="muted">Have an order that is missing? <a href="{BASE}needed/">See what the library still needs</a>.</p>
   <div class="toolbar">
     <label class="sr" for="q" hidden>Search documents</label>
     <input class="search" id="q" type="search" placeholder="Search by title, number or subject…" autocomplete="off" spellcheck="false">
@@ -477,9 +478,56 @@ def build_stats() -> None:
     write("stats.json", json.dumps(usage.active_users()))
 
 
+# ---------------------------------------------------------------- documents the library still needs
+def build_needed() -> None:
+    sys.path.insert(0, os.path.join(SITE, "build"))
+    import needed_docs as nd
+    from urllib.parse import quote
+    pdf_name = "documents-needed-for-the-library.pdf"
+    os.makedirs(os.path.join(SITE, "needed"), exist_ok=True)
+    total, high = nd.build_pdf(os.path.join(SITE, "needed", pdf_name))
+    held = sqlite3.connect(DB).execute("select count(distinct doc_id) from chunks where collection != 'swamy2024'").fetchone()[0]
+    send = APP + "?q=" + quote("For the library: ")
+    secs = []
+    for i, (title, note, rows) in enumerate(nd.SECTIONS, 1):
+        trs = "".join(
+            f"<tr><td>{E(d)}</td><td class='muted'>{E(r)}</td><td>{E(w)}</td>"
+            f"<td>{'<b>High</b>' if p == 'H' else '<span class=muted>Medium</span>'}</td></tr>"
+            for d, r, w, p in rows)
+        secs.append(f'<h2 id="s{i}">{E(title)}</h2>' + (f"<p class='muted'>{E(note)}</p>" if note else "")
+                    + f"<table><thead><tr><th>Document</th><th>Reference</th><th>Who is likely to have it</th>"
+                      f"<th>Priority</th></tr></thead><tbody>{trs}</tbody></table>")
+    dl = "".join(f'<li><a href="{E(u)}" rel="noopener">{E(t)}</a></li>' for t, u in nd.DOWNLOADS)
+    qs = "".join(f"<li>{E(q)}</li>" for q in nd.QUESTIONS)
+    body = f"""<div class="wrap narrow article">
+  <h1>Help Build the Library</h1>
+  <p class="lead">The assistant answers only from official documents. These {total} are still missing, mostly because they
+  sit behind a staff login or were never put online. If you have one, please send it. A photo of each page is enough.</p>
+  <p class="muted">{held:,} documents are already in the <a href="{BASE}library/">Library</a>. {high} of the missing ones are high priority.</p>
+  <div class="ctas" style="display:flex;flex-wrap:wrap;gap:12px;margin:24px 0 8px">
+    <a class="btn btn-primary" href="{E(send)}" data-track="send_document">Send a Document</a>
+    <a class="btn btn-secondary" href="{BASE}needed/{pdf_name}" data-track="download_needed_pdf">Download the List (PDF)</a>
+  </div>
+  <p class="muted" style="font-size:15px">In the assistant, attach the PDF, Word file or photos and send. Each file is
+  checked before it is added; nothing personal from a shared file is published.</p>
+  {''.join(secs)}
+  <h2>Quick Downloads by Hand</h2>
+  <p class="muted">The official site blocks automated downloads. Saving these in a browser and sending them helps.</p>
+  <ul>{dl}</ul>
+  <h2>Questions Only Practitioners Can Settle</h2>
+  <p class="muted">The written rules are unclear or out of date on these. If you handle them at work, <a href="{BASE}feedback/">tell us</a>.</p>
+  <ol>{qs}</ol>
+  <p class="note">List updated {pretty_date(TODAY)}. Priority is based on what people ask most.</p>
+</div>"""
+    write("needed/index.html", page(f"Help Build the Library | {NAME}",
+                                    f"{total} official documents on service rules for Delhi Government teachers, guest teachers, "
+                                    "KVS, NVS, Delhi Police and Central Government staff that the library still needs.",
+                                    "needed/", body))
+
+
 # ---------------------------------------------------------------- sitemap
 def build_sitemap(arts: list[dict]) -> None:
-    urls = [("", TODAY), ("latest/", TODAY), ("library/", TODAY), ("articles/", TODAY), ("feedback/", TODAY), ("privacy/", TODAY), ("terms/", TODAY)] + \
+    urls = [("", TODAY), ("latest/", TODAY), ("library/", TODAY), ("articles/", TODAY), ("needed/", TODAY), ("feedback/", TODAY), ("privacy/", TODAY), ("terms/", TODAY)] + \
            [(f"articles/{a['slug']}/", a.get("last_checked") or TODAY) for a in arts]
     write("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
           "".join(f"  <url><loc>{E(BASE + u)}</loc><lastmod>{d}</lastmod></url>\n" for u, d in urls) + "</urlset>\n")
@@ -493,5 +541,6 @@ if __name__ == "__main__":
     build_policies()
     build_feedback()
     build_stats()
+    build_needed()
     build_sitemap(arts)
     print(f"library: {n} documents · latest: {latest} · articles: {len(arts)} · policies · sitemap")
