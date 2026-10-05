@@ -38,10 +38,10 @@ CATEGORY = {
     "case_law_hc_service": "Delhi High Court judgments", "case_law_hc_criminal": "Delhi High Court judgments",
     "dp_rules": "Delhi Police", "dp_standing_orders": "Delhi Police", "dp_welfare": "Delhi Police",
     "dp_legal_bulletins": "Delhi Police", "dp_rti_manuals": "Delhi Police", "danips": "Delhi Police",
-    "criminal_acts": "Criminal law", "dda_land_law": "Delhi land and DDA", "dda_land_procedures": "Delhi land and DDA",
+    "criminal_acts": "Criminal law", "delhi_govt": "Delhi Government", "dda_land_law": "Delhi land and DDA", "dda_land_procedures": "Delhi land and DDA",
 }
 CATEGORY_ORDER = ["Central rules and orders", "Discipline and vigilance", "KVS and NVS", "Supreme Court judgments",
-                  "Delhi High Court judgments", "Delhi Police", "Criminal law", "Delhi land and DDA"]
+                  "Delhi Government", "Delhi High Court judgments", "Delhi Police", "Criminal law", "Delhi land and DDA"]
 
 
 # ---------------------------------------------------------------- page shell

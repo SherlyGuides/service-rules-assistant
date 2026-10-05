@@ -1,0 +1,75 @@
+{
+  "slug": "retirement-gratuity-calculation-ceiling",
+  "title": "Retirement Gratuity: How It Is Calculated and the Ceiling",
+  "description": "Retirement gratuity is one-fourth of emoluments for each six-monthly period of service, up to 16.5 times emoluments, capped at Rs 25 lakh since 01.01.2024.",
+  "category": "Pension and Retirement",
+  "applies_to": "Central Government civil servants under the CCS (Pension) Rules, 2021 or the CCS (Payment of Gratuity under NPS) Rules, 2021",
+  "answer": "If you have at least five years of qualifying service, your retirement gratuity is one-fourth of your emoluments (basic pay plus DA) for each completed six-monthly period of qualifying service. It cannot exceed 16.5 times your emoluments. From 1 January 2024, the maximum amount is Rs 25 lakh.",
+  "sections": [
+    {
+      "heading": "The Formula",
+      "body_md": "- You must have completed five years' qualifying service and be eligible for service gratuity or pension [(CCS (Pension) Rules 2021, Rule 45(1)(a), PDF p. 74)](https://pensionersportal.gov.in/Document/CSS_PensionRules_2021_Book_Eng.pdf#page=74).\n- Retirement gratuity is one-fourth of your emoluments for each completed six-monthly period of qualifying service, subject to a maximum of 16.5 times the emoluments [(CCS (Pension) Rules 2021, Rule 45(1)(a), PDF p. 74)](https://pensionersportal.gov.in/Document/CSS_PensionRules_2021_Book_Eng.pdf#page=74).\n- A fraction of a year of three months or more counts as a completed six-monthly period [(CCS (Pension) Rules 2021, Rule 45(4), PDF p. 75)](https://pensionersportal.gov.in/Document/CSS_PensionRules_2021_Book_Eng.pdf#page=75).\n- If your qualifying service is four years and nine months or more but less than five years, it is treated as five years [(CCS (Pension) Rules 2021, Rule 45(5), PDF p. 75)](https://pensionersportal.gov.in/Document/CSS_PensionRules_2021_Book_Eng.pdf#page=75).\n- If the amount has a fraction of a rupee, it is rounded up to the next rupee [(CCS (Pension) Rules 2021, Rule 45(1), second proviso, PDF p. 74)](https://pensionersportal.gov.in/Document/CSS_PensionRules_2021_Book_Eng.pdf#page=74).\n\nIn short: gratuity = emoluments x 1/4 x number of completed six-monthly periods. Since 66 six-monthly periods give 16.5 times, service beyond 33 years does not raise the multiple."
+    },
+    {
+      "heading": "What Counts as Emoluments",
+      "body_md": "- Emoluments means basic pay as defined in FR 9(21)(a)(i) that you were drawing immediately before retirement, plus non-practising allowance for medical officers. Stagnation increment also counts [(CCS (Pension) Rules 2021, Rule 31(1), PDF p. 44)](https://pensionersportal.gov.in/Document/CSS_PensionRules_2021_Book_Eng.pdf#page=44).\n- For gratuity, the dearness allowance admissible on the date of retirement is also treated as emoluments [(CCS (Pension) Rules 2021, Rule 45(6), second proviso, PDF p. 75)](https://pensionersportal.gov.in/Document/CSS_PensionRules_2021_Book_Eng.pdf#page=75).\n- If your emoluments were reduced during the last ten months of service, average emoluments are used instead [(CCS (Pension) Rules 2021, Rule 45(6), first proviso, PDF p. 75)](https://pensionersportal.gov.in/Document/CSS_PensionRules_2021_Book_Eng.pdf#page=75)."
+    },
+    {
+      "heading": "The Rs 25 Lakh Ceiling",
+      "body_md": "- The rule as printed in 2021 capped retirement and death gratuity at Rs 20 lakh [(CCS (Pension) Rules 2021, Rule 45(1), first proviso, PDF p. 74)](https://pensionersportal.gov.in/Document/CSS_PensionRules_2021_Book_Eng.pdf#page=74).\n- The Government accepted the 7th CPC recommendation that the gratuity ceiling may rise by 25% whenever DA rises by 50% [(DoPPW Resolution 04.08.2016, item 8, PDF p. 6)](https://documents.doptcirculars.nic.in/D3/D03ppw/NotifiedResolution-2016.pdf#page=6).\n- After DA rose from 46% to 50% from 1 January 2024, DoPPW raised the maximum retirement gratuity and death gratuity by 25%, from Rs 20 lakh to Rs 25 lakh, with effect from 1 January 2024. This covers both the CCS (Pension) Rules, 2021 and the CCS (Payment of Gratuity under NPS) Rules, 2021 [(DoPPW OM dated 30.05.2024, para 3, PDF p. 1)](https://documents.doptcirculars.nic.in/D3/D03ppw/GratuityrAHHB.pdf#page=1).\n\n| Example | Emoluments (pay + DA) | Six-monthly periods | Formula result | Payable |\n|---|---|---|---|---|\n| A | Rs 1,20,000 | 66 (33 years) | Rs 19,80,000 | Rs 19,80,000 |\n| B | Rs 2,00,000 | 66 (33 years) | Rs 33,00,000 | Rs 25,00,000 (ceiling) |\n\nThese are worked illustrations of the formula, not official figures."
+    },
+    {
+      "heading": "If You Are Under NPS",
+      "body_md": "- NPS employees get retirement gratuity under a separate set of rules, with the same formula: one-fourth of emoluments for each completed six-monthly period, up to 16.5 times emoluments [(CCS (Payment of Gratuity under NPS) Rules 2021, Rule 22(1), PDF p. 28)](https://pensionersportal.gov.in/Document/Gratuity_rules_2021_NPS_31122025.pdf#page=28).\n- The amended text of those rules caps retirement or death gratuity at twenty five lakh rupees and counts DA on the date of retirement as emoluments [(CCS (Payment of Gratuity under NPS) Rules 2021, Rule 22(2) proviso and 22(3), PDF p. 29)](https://pensionersportal.gov.in/Document/Gratuity_rules_2021_NPS_31122025.pdf#page=29)."
+    },
+    {
+      "heading": "Where to Check",
+      "body_md": "Read Rules 31 and 45 of the CCS (Pension) Rules, 2021 [(CCS (Pension) Rules 2021, Rule 45, PDF p. 74)](https://pensionersportal.gov.in/Document/CSS_PensionRules_2021_Book_Eng.pdf#page=74) with the DoPPW OM dated 30.05.2024 [(DoPPW OM dated 30.05.2024, PDF p. 1)](https://documents.doptcirculars.nic.in/D3/D03ppw/GratuityrAHHB.pdf#page=1).\n\nThe CCS (Pension) Rules, 2021 cover civilian Government servants in the Defence Services, but not railway servants [(CCS (Pension) Rules 2021, Rule 2 and 2(a), PDF p. 12)](https://pensionersportal.gov.in/Document/CSS_PensionRules_2021_Book_Eng.pdf#page=12) or members of the All India Services [(CCS (Pension) Rules 2021, Rule 2(e), PDF p. 13)](https://pensionersportal.gov.in/Document/CSS_PensionRules_2021_Book_Eng.pdf#page=13). Railway staff, AIS officers and armed forces personnel should check their own rules."
+    }
+  ],
+  "faqs": [
+    {
+      "q": "What is the maximum retirement gratuity for central government employees?",
+      "a": "Rs 25 lakh, with effect from 1 January 2024, under the DoPPW OM dated 30.05.2024. Within that cap, the formula also limits gratuity to 16.5 times your emoluments (Rule 45(1)(a))."
+    },
+    {
+      "q": "Is DA included when calculating gratuity?",
+      "a": "Yes. The dearness allowance admissible on the date of retirement is treated as emoluments for gratuity (Rule 45(6), second proviso)."
+    },
+    {
+      "q": "How many years of service do I need for retirement gratuity?",
+      "a": "Five years of qualifying service (Rule 45(1)(a)). Service of four years and nine months or more is treated as five years (Rule 45(5))."
+    },
+    {
+      "q": "Does an extra three months of service count?",
+      "a": "Yes. A fraction of a year of three months or more is treated as a completed six-monthly period (Rule 45(4))."
+    },
+    {
+      "q": "Do NPS employees get retirement gratuity?",
+      "a": "Yes, under the CCS (Payment of Gratuity under NPS) Rules, 2021, on the same one-fourth formula and the Rs 25 lakh ceiling (Rule 22)."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Central Civil Services (Pension) Rules, 2021 (DoPPW book edition, December 2021)",
+      "issuer": "Department of Pension and Pensioners' Welfare, Government of India",
+      "url": "https://pensionersportal.gov.in/Document/CSS_PensionRules_2021_Book_Eng.pdf"
+    },
+    {
+      "title": "DoPPW OM No. 28/03/2024-P&PW(B)/Gratuity/9559 dated 30.05.2024: Enhancement of maximum limit of Gratuity on DA reaching 50%",
+      "issuer": "Department of Pension and Pensioners' Welfare, Government of India",
+      "url": "https://documents.doptcirculars.nic.in/D3/D03ppw/GratuityrAHHB.pdf"
+    },
+    {
+      "title": "DoPPW Resolution No. 38/37/2016-P&PW(A) dated 04.08.2016 on 7th CPC recommendations on pension and retirement benefits",
+      "issuer": "Department of Pension and Pensioners' Welfare, Government of India",
+      "url": "https://documents.doptcirculars.nic.in/D3/D03ppw/NotifiedResolution-2016.pdf"
+    },
+    {
+      "title": "Central Civil Services (Payment of Gratuity under National Pension System) Rules, 2021 (as amended up to 24.04.2025)",
+      "issuer": "Department of Pension and Pensioners' Welfare, Government of India",
+      "url": "https://pensionersportal.gov.in/Document/Gratuity_rules_2021_NPS_31122025.pdf"
+    }
+  ],
+  "last_checked": "2026-10-05"
+}
